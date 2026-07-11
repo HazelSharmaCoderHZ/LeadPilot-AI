@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     DEBUG: bool
     HOST: str
     PORT: int
-
+    firecrawl_api_key: str
     DATABASE_URL: str
     SUPABASE_URL: str
     SUPABASE_ANON_KEY: str
