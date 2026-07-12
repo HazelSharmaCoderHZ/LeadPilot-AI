@@ -23,6 +23,13 @@ class BaseAgent(ABC):
 
         self.validate_state(state)
 
+        if state.execution.status is WorkflowStatus.FAILED:
+            logger.warning(
+                "[%s] Skipped because workflow has already failed",
+                self.name,
+            )
+            return state
+
         state.execution.current_agent = self.name
         state.execution.status = WorkflowStatus.RUNNING
 

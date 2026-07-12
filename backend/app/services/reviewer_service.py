@@ -1,11 +1,11 @@
 from app.schemas.state import LeadPilotState
-from app.services.providers.llm.gemini import GeminiProvider
+from app.services.providers.llm.base import BaseLLM
 
 
 class ReviewerService:
 
-    def __init__(self):
-        self.llm = GeminiProvider()
+    def __init__(self, llm: BaseLLM):
+        self.llm = llm
 
     def review_email(self, state: LeadPilotState):
 

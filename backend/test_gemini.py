@@ -1,12 +1,24 @@
-from google import genai
+from types import SimpleNamespace
 
-from app.core.config import settings
+from app.services.providers.llm.gemini import GeminiProvider
 
-client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-response = client.models.generate_content(
-    model="gemini-3.1-flash-lite",
-    contents="Say hello in one sentence."
-)
+def test_generate_json_uses_provider_client_without_network(monkeypatch):
+    provider = GeminiProvider()
+    calls = []
 
-print(response.text)
+    def generate_content(**kwargs):
+        calls.append(kwargs)
+        return SimpleNamespace(text='{"company_name": "Example Co"}')
+
+    monkeypatch.setattr(
+        provider.client.models,
+        "generate_content",
+        generate_content,
+    )
+
+    assert provider._generate_json("Summarize this") == {
+        "company_name": "Example Co"
+    }
+    assert calls[0]["model"] == provider.model
+    assert calls[0]["contents"] == "Summarize this"

@@ -5,9 +5,9 @@ from app.services.reviewer_service import ReviewerService
 
 class ReviewerAgent(BaseAgent):
 
-    def __init__(self):
+    def __init__(self, service: ReviewerService):
         super().__init__()
-        self.service = ReviewerService()
+        self.service = service
 
     def run(self, state: LeadPilotState):
 

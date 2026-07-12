@@ -1,14 +1,12 @@
 from app.agents.base import BaseAgent
 from app.schemas.state import LeadPilotState
-
-from app.services.providers.crawlers.firecrawl import FirecrawlCrawler
 from app.services.research_service import ResearchService
 
 
 class ResearchAgent(BaseAgent):
-    def __init__(self):
+    def __init__(self, service: ResearchService):
         super().__init__()
-        self.service = ResearchService(FirecrawlCrawler())
+        self.service = service
 
     def run(self, state: LeadPilotState) -> LeadPilotState:
         if not state.company.website:

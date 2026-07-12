@@ -5,9 +5,9 @@ from app.services.outreach_service import OutreachService
 
 class OutreachAgent(BaseAgent):
 
-    def __init__(self):
+    def __init__(self, service: OutreachService):
         super().__init__()
-        self.service = OutreachService()
+        self.service = service
 
     def run(self, state: LeadPilotState):
 

@@ -5,9 +5,9 @@ from app.services.qualification_service import QualificationService
 
 class QualificationAgent(BaseAgent):
 
-    def __init__(self):
+    def __init__(self, service: QualificationService):
         super().__init__()
-        self.service = QualificationService()
+        self.service = service
 
     def run(self, state: LeadPilotState):
 

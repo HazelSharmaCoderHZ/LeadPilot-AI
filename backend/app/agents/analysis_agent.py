@@ -5,9 +5,9 @@ from app.services.analysis_service import AnalysisService
 
 class AnalysisAgent(BaseAgent):
 
-    def __init__(self):
+    def __init__(self, service: AnalysisService):
         super().__init__()
-        self.service = AnalysisService()
+        self.service = service
 
     def run(self, state: LeadPilotState):
 

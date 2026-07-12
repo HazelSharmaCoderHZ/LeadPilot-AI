@@ -1,11 +1,11 @@
 from app.schemas.qualification import QualificationResult
-from app.services.providers.llm.gemini import GeminiProvider
+from app.services.providers.llm.base import BaseLLM
 
 
 class QualificationService:
 
-    def __init__(self):
-        self.llm = GeminiProvider()
+    def __init__(self, llm: BaseLLM):
+        self.llm = llm
 
     def qualify(
         self,
