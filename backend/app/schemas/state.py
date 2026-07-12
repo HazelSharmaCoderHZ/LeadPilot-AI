@@ -17,6 +17,11 @@ class WorkflowStatus(str, Enum):
     FAILED = "failed"
 
 class ResearchState(BaseModel):
+    company_name: str | None = None
+    title: str | None = None
+    description: str | None = None
+    summary: str | None = None
+    language: str | None = None
     mission: str | None = None
     products: list[str] = Field(default_factory=list)
     target_audience: str | None = None
@@ -25,6 +30,9 @@ class ResearchState(BaseModel):
 
 
 class ScrapedContentState(BaseModel):
+    website: str | None = None
+    markdown: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
     homepage: str | None = None
     about: str | None = None
     pricing: str | None = None
@@ -56,12 +64,15 @@ class OutreachState(BaseModel):
     subject: str | None = None
     body: str | None = None
     cta: str | None = None
+    personalization_summary: str | None = None
 
 
 class ReviewState(BaseModel):
     approved: bool = False
-    feedback: str | None = None
-    final_email: str | None = None
+    score: int | None = None
+    feedback: list[str] = Field(default_factory=list)
+    revised_subject: str | None = None
+    revised_body: str | None = None
 
 
 class ExecutionState(BaseModel):
@@ -74,7 +85,7 @@ class MetadataState(BaseModel):
     workflow_version: str = "v1"
     execution_time: float = 0.0
     llm_provider: str = "gemini"
-    llm_model: str = "gemini-2.5-flash"
+    llm_model: str = "gemini-3.1-flash-lite"
 
     started_at: datetime = Field(default_factory=datetime.utcnow)
     completed_at: datetime | None = None

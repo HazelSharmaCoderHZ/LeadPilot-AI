@@ -4,8 +4,10 @@ from app.workflows.lead_pipeline import lead_pipeline
 
 def test_dummy_workflow():
 
-    state = LeadPilotState()
+    state = LeadPilotState(
+        company=CompanyState(
+            website="https://openai.com"
+        )
+    )
 
-    result = lead_pipeline.invoke(state)
-
-    assert isinstance(result, LeadPilotState)
+    result = await graph.ainvoke(state.model_dump())

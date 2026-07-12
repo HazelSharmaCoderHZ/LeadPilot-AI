@@ -10,11 +10,12 @@ class Settings(BaseSettings):
     DEBUG: bool
     HOST: str
     PORT: int
-    firecrawl_api_key: str
+    FIRECRAWL_API_KEY: str
+    GEMINI_API_KEY: str
     DATABASE_URL: str
     SUPABASE_URL: str
     SUPABASE_ANON_KEY: str
-
+    GEMINI_MODEL: str = "gemini-3.1-flash-lite"
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,

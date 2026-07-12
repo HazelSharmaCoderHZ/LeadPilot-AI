@@ -1,13 +1,14 @@
+from abc import ABC, abstractmethod
+
 from app.schemas.contact import ContactResult
-from app.services.providers.search.base import BaseSearchProvider
 
 
-class TavilyProvider(BaseSearchProvider):
+class BaseSearchProvider(ABC):
 
+    @abstractmethod
     def find_contacts(
         self,
         company_name: str,
         website: str,
     ) -> list[ContactResult]:
-
-        return []
+        ...
