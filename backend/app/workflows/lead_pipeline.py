@@ -80,7 +80,7 @@ def build_production_pipeline():
     return build_lead_pipeline(
         research_agent=ResearchAgent(ResearchService(crawler)),
         analysis_agent=AnalysisAgent(AnalysisService(llm)),
-        contacts_agent=ContactsAgent(ContactsService(search_provider)),
+        contacts_agent=ContactsAgent(ContactsService(search_provider,llm,)),
         qualification_agent=QualificationAgent(QualificationService(llm)),
         outreach_agent=OutreachAgent(OutreachService(llm)),
         reviewer_agent=ReviewerAgent(ReviewerService(llm)),

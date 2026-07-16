@@ -7,3 +7,12 @@ class ContactResult(BaseModel):
     email: str | None = None
     linkedin: str | None = None
     confidence: float = 0.0
+
+
+class ContactExtractionResult(BaseModel):
+    """
+    Structured response returned by the LLM when extracting
+    decision makers from Tavily search results.
+    """
+
+    contacts: list[ContactResult]

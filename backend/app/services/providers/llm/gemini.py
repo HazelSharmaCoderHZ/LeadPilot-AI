@@ -1,7 +1,9 @@
 import json
+from typing import Type, TypeVar
 
 from google import genai
 from google.genai import types
+from pydantic import BaseModel
 
 from app.core.config import settings
 from app.schemas.analysis import AnalysisResult
@@ -9,8 +11,9 @@ from app.schemas.outreach import OutreachResult
 from app.schemas.qualification import QualificationResult
 from app.schemas.review import ReviewResult
 from app.services.providers.llm.base import BaseLLM
-import time
-from google.genai.errors import ServerError
+
+T = TypeVar("T", bound=BaseModel)
+
 
 class GeminiProvider(BaseLLM):
 
@@ -30,6 +33,17 @@ class GeminiProvider(BaseLLM):
         )
 
         return json.loads(response.text)
+
+    def generate_structured(
+        self,
+        prompt: str,
+        schema: Type[T],
+    ) -> T:
+        """
+        Generate structured JSON using Gemini and validate it against the
+        supplied Pydantic schema.
+        """
+        return schema(**self._generate_json(prompt))
 
     def analyze(self, markdown: str) -> AnalysisResult:
 
@@ -54,7 +68,7 @@ Website:
 {markdown}
 """
 
-        return AnalysisResult(**self._generate_json(prompt))
+        return self.generate_structured(prompt, AnalysisResult)
 
     def qualify(
         self,
@@ -90,7 +104,7 @@ Return ONLY valid JSON.
 }}
 """
 
-        return QualificationResult(**self._generate_json(prompt))
+        return self.generate_structured(prompt, QualificationResult)
 
     def generate_outreach_email(
         self,
@@ -135,7 +149,7 @@ Return ONLY valid JSON.
 }}
 """
 
-        return OutreachResult(**self._generate_json(prompt))
+        return self.generate_structured(prompt, OutreachResult)
 
     def review_email(
         self,
@@ -159,11 +173,11 @@ Check:
 Return ONLY valid JSON.
 
 {{
-    "approved":true,
-    "score":95,
-    "feedback":[],
-    "revised_subject":"",
-    "revised_body":""
+    "approved": true,
+    "score": 95,
+    "feedback": [],
+    "revised_subject": "",
+    "revised_body": ""
 }}
 
 Subject:
@@ -173,4 +187,4 @@ Body:
 {body}
 """
 
-        return ReviewResult(**self._generate_json(prompt))
+        return self.generate_structured(prompt, ReviewResult)
