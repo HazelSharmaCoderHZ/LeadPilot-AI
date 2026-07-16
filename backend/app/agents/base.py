@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import time
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime,UTC
 
 from app.schemas.state import LeadPilotState, WorkflowStatus
 
@@ -47,7 +47,7 @@ class BaseAgent(ABC):
             elapsed = time.perf_counter() - start_time
 
             state.execution.status = WorkflowStatus.COMPLETED
-            state.metadata.completed_at = datetime.utcnow()
+            state.metadata.completed_at = datetime.now(UTC)
 
             # Optional: if you add execution_time to MetadataState
             # state.metadata.execution_time = elapsed
