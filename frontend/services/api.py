@@ -4,7 +4,6 @@ from config import BACKEND_URL
 import streamlit as st
 
 def run_workflow(company_name: str, website: str):
-    st.write("Calling backend:", BACKEND_URL)
 
     resp = requests.post(
         f"{BACKEND_URL}/workflow/run",
