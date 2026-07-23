@@ -14,7 +14,6 @@ def run_workflow(company_name: str, website: str):
         timeout=300,
     )
 
-    st.write(resp.status_code)
 
     resp.raise_for_status()
     return resp.json()
