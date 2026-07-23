@@ -13,12 +13,10 @@ def searched():
 
     try:
         data = get_history()
+        if not data:
+            data = _demo_data()
     except Exception:
-        data = [
-            {"id": 1, "company_name": "OpenAI", "website": "https://openai.com", "qualification_score": 92},
-            {"id": 2, "company_name": "Stripe", "website": "https://stripe.com", "qualification_score": 88},
-            {"id": 3, "company_name": "Notion", "website": "https://notion.so", "qualification_score": 95},
-        ]
+        data = _demo_data()
 
     if search_query:
         data = [r for r in data if search_query in r.get("company_name", "").lower()]
@@ -43,3 +41,20 @@ def searched():
             <div class="row-item">{score_str}</div>
         </div>
         """, unsafe_allow_html=True)
+
+
+def _demo_data():
+    names = [
+        ("OpenAI", "https://openai.com"),
+        ("Stripe", "https://stripe.com"),
+        ("Notion", "https://notion.so"),
+        ("Anthropic", "https://anthropic.com"),
+        ("Vercel", "https://vercel.com"),
+        ("Linear", "https://linear.app"),
+        ("Figma", "https://figma.com"),
+        ("Supabase", "https://supabase.com"),
+    ]
+    return [
+        {"id": i+1, "company_name": name, "website": url, "qualification_score": 70 + (sum(ord(c) for c in name) % 28)}
+        for i, (name, url) in enumerate(names)
+    ]

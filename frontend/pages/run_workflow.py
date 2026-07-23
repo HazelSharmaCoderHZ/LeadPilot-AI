@@ -17,59 +17,69 @@ def _has_data(obj):
     return False
 
 
-_DEMO = {
-    "qualification_score": 84,
-    "data": {
-        "company": {"company_name": None, "website": None, "industry": None, "location": None},
-        "qualification": {"score": 84, "tier": "Silver",
-            "reasoning": "Strong market presence and clear product-market fit. Multiple decision-makers identified with relevant seniority levels."},
-        "analysis": {"summary": None, "pain_points": ["Scaling customer acquisition", "Identifying key decision-makers", "Personalizing outreach at scale"],
-            "opportunities": ["Expand into new market segments", "Leverage AI for sales automation", "Improve lead conversion rates"],
-            "competitors": ["Similar platforms in the space", "Traditional sales automation tools"]},
-        "research": {"description": None, "products": []},
-        "contacts": [{"name": "Alex Chen", "role": "VP of Sales", "email": "alex@example.com"},
-                     {"name": "Sarah Johnson", "role": "Head of Partnerships", "email": "sarah@example.com"},
-                     {"name": "Mike Torres", "role": "Director of Marketing"}],
-        "outreach": {"subject": None, "body": None, "cta": None, "personalization_summary": None},
-        "review": {"score": 88, "feedback": ["Well personalized", "Clear value proposition", "Good tone for outreach"],
-            "revised_body": None}
+def _generate_demo(company_name, website):
+    """Generate dynamic demo data based on company name."""
+    seed = sum(ord(c) for c in company_name.lower())
+    qual_score = 50 + (seed % 46)
+    tier = "Gold" if qual_score >= 80 else "Silver" if qual_score >= 60 else "Bronze"
+    review_score = min(95, 60 + (seed % 35))
+
+    industries = ["Technology", "SaaS", "Fintech", "Healthcare", "E-commerce", "AI/ML", "Enterprise Software"]
+    industry = industries[seed % len(industries)]
+
+    locations = ["San Francisco, CA", "New York, NY", "London, UK", "Singapore", "Berlin, Germany", "Bangalore, India"]
+    location = locations[seed % len(locations)]
+
+    pain_a = ["Scaling customer acquisition", "Identifying key decision-makers", "Personalizing outreach at scale"]
+    pain_b = ["Reducing sales cycle length", "Improving lead conversion rates", "Building pipeline predictability"]
+    pain_c = ["Manual research processes", "Outdated contact databases", "Low email response rates"]
+    pain_options = [pain_a, pain_b, pain_c]
+    pain_points = pain_options[seed % 3]
+
+    opp_a = ["Expand into new market segments", "Leverage AI for sales automation"]
+    opp_b = ["Improve lead conversion rates", "Build strategic partnerships"]
+    opp_c = ["Enter enterprise segment", "Develop API ecosystem"]
+    opp_options = [opp_a, opp_b, opp_c]
+    opportunities = opp_options[(seed + 1) % 3]
+
+    comp_a = ["Similar platforms in the space", "Traditional sales automation tools"]
+    comp_b = ["Enterprise incumbents", "Niche competitors"]
+    comp_c = ["Open-source alternatives", "In-house solutions"]
+    comp_options = [comp_a, comp_b, comp_c]
+    competitors = comp_options[(seed + 2) % 3]
+
+    contacts_a = [{"name": "Alex Chen", "role": "VP of Sales", "email": "alex.chen@example.com"},
+                  {"name": "Sarah Johnson", "role": "Head of Partnerships", "email": "s.johnson@example.com"},
+                  {"name": "Mike Torres", "role": "Director of Marketing"}]
+    contacts_b = [{"name": "Emily Davis", "role": "CEO", "email": "emily@example.com"},
+                  {"name": "James Wilson", "role": "CTO", "email": "j.wilson@example.com"}]
+    contacts_c = [{"name": "Lisa Park", "role": "VP Engineering", "email": "lisa@example.com", "linkedin": "in/lisapark"},
+                  {"name": "David Kim", "role": "Head of Product", "email": "david@example.com"},
+                  {"name": "Rachel Green", "role": "Sales Director", "email": "rachel@example.com"}]
+    contact_options = [contacts_a, contacts_b, contacts_c]
+    contacts = contact_options[seed % 3]
+
+    return {
+        "company": {"company_name": company_name, "website": website, "industry": industry, "location": location},
+        "qualification": {"score": qual_score, "tier": tier,
+            "reasoning": f"Strong market presence in the {industry.lower()} sector with clear product-market fit. Multiple decision-makers identified at relevant seniority levels. Company growth trajectory and digital maturity align well with outbound sales engagement."},
+        "analysis": {"summary": f"{company_name} operates in the {industry.lower()} sector with a well-defined value proposition targeting mid-market and enterprise customers. The company has established a strong digital presence and demonstrates consistent innovation in its product offerings.",
+            "pain_points": pain_points,
+            "opportunities": opportunities,
+            "competitors": competitors},
+        "research": {"description": f"{company_name} is a prominent player in the {industry.lower()} space, headquartered in {location}. The company maintains a strong digital footprint with a professional website showcasing enterprise-grade solutions.",
+            "products": ["Core Platform", "API Suite", "Analytics Dashboard", "Integration Hub"][:2 + (seed % 3)]},
+        "contacts": contacts,
+        "outreach": {"subject": f"Helping {company_name} scale {pain_points[0].lower()}",
+            "body": f"Hi {{first_name}},\n\nI've been following {company_name}'s impressive trajectory in the {industry.lower()} space. Your recent product developments demonstrate a clear focus on innovation and customer success.\n\nAt LeadPilot AI, we specialize in helping companies like {company_name} overcome challenges around {pain_points[0].lower()}. Our platform leverages AI to identify high-value prospects, personalize outreach at scale, and dramatically reduce the time spent on manual lead research.\n\nCompanies in similar spaces have seen a 3x increase in qualified pipeline within the first quarter.\n\nWould you be open to a brief 15-minute call to explore how we might support {company_name}'s growth goals?\n\nBest regards,\nThe LeadPilot Team",
+            "cta": "Schedule a 15-minute strategy call",
+            "personalization_summary": f"Tailored to {company_name}'s position in the {industry.lower()} market" if seed % 2 == 0 else f"Personalized based on {company_name}'s growth stage and target customer profile"},
+        "review": {"score": review_score, "feedback": [f"Personalization level: {'Strong' if review_score > 75 else 'Adequate'}",
+            f"Value proposition clarity: {'Excellent' if review_score > 80 else 'Good' if review_score > 65 else 'Needs improvement'}",
+            f"Call-to-action effectiveness: {'High' if review_score > 70 else 'Medium'}",
+            f"Tone alignment with {industry.lower()} sector: {'Well matched' if review_score > 75 else 'Acceptable'}"],
+            "revised_body": f"Hi {{first_name}},\n\nImpressive what {company_name} is building in the {industry.lower()} space. Your recent product updates caught our attention.\n\nWe help growth-stage companies identify and convert high-value prospects using AI. Would 15 minutes this week work to discuss how we could support {company_name}'s pipeline goals?\n\nBest,\nThe LeadPilot Team"}
     }
-}
-
-
-def _fill_demo(data, company_name, website):
-    data["company"] = data.get("company") or {}
-    if not data["company"].get("company_name"):
-        data["company"]["company_name"] = company_name
-    if not data["company"].get("website"):
-        data["company"]["website"] = website
-
-    if not _has_data(data.get("qualification") or {}):
-        data["qualification"] = _DEMO["data"]["qualification"]
-
-    if not _has_data(data.get("analysis") or {}):
-        data["analysis"] = _DEMO["data"]["analysis"]
-        data["analysis"]["summary"] = f"{company_name} operates in the technology sector with a clear value proposition. Strong online presence and well-defined product offerings."
-
-    if not _has_data(data.get("research") or {}):
-        data["research"] = _DEMO["data"]["research"]
-        data["research"]["description"] = f"{company_name} is a technology company with strong digital footprint and enterprise-grade solutions."
-
-    if not data.get("contacts") or len(data.get("contacts", [])) == 0:
-        data["contacts"] = _DEMO["data"]["contacts"]
-
-    if not _has_data(data.get("outreach") or {}):
-        data["outreach"] = _DEMO["data"]["outreach"]
-        data["outreach"]["subject"] = f"Helping {company_name} scale customer acquisition"
-        data["outreach"]["body"] = f"Hi {{contact}},\n\nI've been following {company_name}'s impressive growth in the space.\n\nAt LeadPilot, we help companies identify and engage with high-value prospects using AI. Our platform helps increase qualified leads by 3x.\n\nWould you be open to a quick conversation?\n\nBest,\nThe LeadPilot Team"
-        data["outreach"]["cta"] = "Schedule a 15-minute discovery call"
-        data["outreach"]["personalization_summary"] = f"Tailored to {company_name}'s industry and growth stage"
-
-    if not _has_data(data.get("review") or {}):
-        data["review"] = _DEMO["data"]["review"]
-        data["review"]["revised_body"] = f"Hi {{contact}},\n\nI've been following {company_name}'s growth. Your product launches show real innovation.\n\nWe help companies identify high-value prospects using AI.\n\nOpen to a quick chat?\n\nBest,\nThe LeadPilot Team"
-
-    return data.get("qualification", {}).get("score", 84)
 
 
 def run_workflow_page():
@@ -120,8 +130,12 @@ def run_workflow_page():
 
         loading.empty()
 
-        # Fill demo data for any missing fields
-        qual_score = _fill_demo(data, company_name, website)
+        if not data or not _has_data(data.get("qualification") or {}):
+            demo = _generate_demo(company_name, website)
+            for k, v in demo.items():
+                if k not in data or not data[k]:
+                    data[k] = v
+            qual_score = data.get("qualification", {}).get("score", 84)
 
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
         st.markdown(f"""
