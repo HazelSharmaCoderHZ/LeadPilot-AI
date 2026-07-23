@@ -1,1 +1,3 @@
-BACKEND_URL = "http://127.0.0.1:8000"
+import streamlit as st
+
+BACKEND_URL = st.secrets["BACKEND_URL"]
